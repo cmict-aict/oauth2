@@ -15,7 +15,7 @@ import (
 
 type AuthorizeResult struct {
 	RedirectURI string
-	Data        interface{}
+	Data        map[string]interface{}
 }
 
 // NewDefaultServer create a default authorization server
