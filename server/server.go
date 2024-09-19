@@ -14,6 +14,7 @@ import (
 )
 
 type AuthorizeResult struct {
+	AuthReq     *AuthorizeRequest
 	RedirectURI string
 	Data        map[string]interface{}
 }
@@ -376,6 +377,7 @@ func (s *Server) HandleAuthorizeRequestCus(w http.ResponseWriter, r *http.Reques
 		req.RedirectURI = client.GetDomain()
 	}
 	result := &AuthorizeResult{
+		AuthReq:     req,
 		RedirectURI: req.RedirectURI,
 		Data:        s.GetAuthorizeData(req.ResponseType, ti),
 	}
