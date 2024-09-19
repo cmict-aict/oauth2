@@ -108,7 +108,33 @@ func (s *Server) tokenError(w http.ResponseWriter, err error) error {
 	return s.token(w, data, header, statusCode)
 }
 
+func (s *Server) TokenError(w http.ResponseWriter, err error) error {
+	data, statusCode, header := s.GetErrorData(err)
+	return s.token(w, data, header, statusCode)
+}
+
 func (s *Server) token(w http.ResponseWriter, data map[string]interface{}, header http.Header, statusCode ...int) error {
+	if fn := s.ResponseTokenHandler; fn != nil {
+		return fn(w, data, header, statusCode...)
+	}
+	w.Header().Set("Content-Type", "application/json;charset=UTF-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.Header().Set("Pragma", "no-cache")
+
+	for key := range header {
+		w.Header().Set(key, header.Get(key))
+	}
+
+	status := http.StatusOK
+	if len(statusCode) > 0 && statusCode[0] > 0 {
+		status = statusCode[0]
+	}
+
+	w.WriteHeader(status)
+	return json.NewEncoder(w).Encode(data)
+}
+
+func (s *Server) Token(w http.ResponseWriter, data map[string]interface{}, header http.Header, statusCode ...int) error {
 	if fn := s.ResponseTokenHandler; fn != nil {
 		return fn(w, data, header, statusCode...)
 	}
