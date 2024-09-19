@@ -13,6 +13,11 @@ import (
 	"github.com/cmict-aict/oauth2/v4/errors"
 )
 
+type AuthorizeResult struct {
+	RedirectURI string
+	Data        interface{}
+}
+
 // NewDefaultServer create a default authorization server
 func NewDefaultServer(manager oauth2.Manager) *Server {
 	return NewServer(NewConfig(), manager)
@@ -76,6 +81,17 @@ func (s *Server) redirectError(w http.ResponseWriter, req *AuthorizeRequest, err
 }
 
 func (s *Server) redirect(w http.ResponseWriter, req *AuthorizeRequest, data map[string]interface{}) error {
+	uri, err := s.GetRedirectURI(req, data)
+	if err != nil {
+		return err
+	}
+
+	w.Header().Set("Location", uri)
+	w.WriteHeader(302)
+	return nil
+}
+
+func (s *Server) Redirect(w http.ResponseWriter, req *AuthorizeRequest, data map[string]interface{}) error {
 	uri, err := s.GetRedirectURI(req, data)
 	if err != nil {
 		return err
@@ -313,6 +329,57 @@ func (s *Server) HandleAuthorizeRequest(w http.ResponseWriter, r *http.Request) 
 	}
 
 	return s.redirect(w, req, s.GetAuthorizeData(req.ResponseType, ti))
+}
+
+// HandleAuthorizeRequestCus the authorization request handling with custom handle
+func (s *Server) HandleAuthorizeRequestCus(w http.ResponseWriter, r *http.Request) (*AuthorizeResult, error) {
+	ctx := r.Context()
+	req, err := s.ValidationAuthorizeRequest(r)
+	if err != nil {
+		return nil, s.handleError(w, req, err)
+	}
+	// user authorization
+	userID, err := s.UserAuthorizationHandler(w, r)
+	if err != nil {
+		return nil, s.handleError(w, req, err)
+	} else if userID == "" {
+		return nil, nil
+	}
+	req.UserID = userID
+	// specify the scope of authorization
+	if fn := s.AuthorizeScopeHandler; fn != nil {
+		scope, err := fn(w, r)
+		if err != nil {
+			return nil, err
+		} else if scope != "" {
+			req.Scope = scope
+		}
+	}
+	// specify the expiration time of access token
+	if fn := s.AccessTokenExpHandler; fn != nil {
+		exp, err := fn(w, r)
+		if err != nil {
+			return nil, err
+		}
+		req.AccessTokenExp = exp
+	}
+	ti, err := s.GetAuthorizeToken(ctx, req)
+	if err != nil {
+		return nil, s.handleError(w, req, err)
+	}
+	// If the redirect URI is empty, the default domain provided by the client is used.
+	if req.RedirectURI == "" {
+		client, err := s.Manager.GetClient(ctx, req.ClientID)
+		if err != nil {
+			return nil, err
+		}
+		req.RedirectURI = client.GetDomain()
+	}
+	result := &AuthorizeResult{
+		RedirectURI: req.RedirectURI,
+		Data:        s.GetAuthorizeData(req.ResponseType, ti),
+	}
+	return result, nil
 }
 
 // ValidationTokenRequest the token request validation
