@@ -13,13 +13,13 @@ import (
 	"os"
 	"time"
 
-	"github.com/go-oauth2/oauth2/v4/generates"
+	"github.com/cmict-aict/oauth2/v4/generates"
 
-	"github.com/go-oauth2/oauth2/v4/errors"
-	"github.com/go-oauth2/oauth2/v4/manage"
-	"github.com/go-oauth2/oauth2/v4/models"
-	"github.com/go-oauth2/oauth2/v4/server"
-	"github.com/go-oauth2/oauth2/v4/store"
+	"github.com/cmict-aict/oauth2/v4/errors"
+	"github.com/cmict-aict/oauth2/v4/manage"
+	"github.com/cmict-aict/oauth2/v4/models"
+	"github.com/cmict-aict/oauth2/v4/server"
+	"github.com/cmict-aict/oauth2/v4/store"
 	"github.com/go-session/session"
 )
 

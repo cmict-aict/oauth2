@@ -31,7 +31,7 @@
 ### Download and install
 
 ```bash
-go get -u -v github.com/go-oauth2/oauth2/v4/...
+go get -u -v github.com/cmict-aict/oauth2/v4/...
 ```
 
 ### Create file `server.go`
@@ -43,11 +43,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/go-oauth2/oauth2/v4/errors"
-	"github.com/go-oauth2/oauth2/v4/manage"
-	"github.com/go-oauth2/oauth2/v4/models"
-	"github.com/go-oauth2/oauth2/v4/server"
-	"github.com/go-oauth2/oauth2/v4/store"
+	"github.com/cmict-aict/oauth2/v4/errors"
+	"github.com/cmict-aict/oauth2/v4/manage"
+	"github.com/cmict-aict/oauth2/v4/models"
+	"github.com/cmict-aict/oauth2/v4/server"
+	"github.com/cmict-aict/oauth2/v4/store"
 )
 
 func main() {
@@ -138,7 +138,7 @@ Simulation examples of authorization code model, please check [example](/example
 ```go
 
 import (
-	"github.com/go-oauth2/oauth2/v4/generates"
+	"github.com/cmict-aict/oauth2/v4/generates"
 	"github.com/dgrijalva/jwt-go"
 )
 
@@ -165,9 +165,9 @@ if !ok || !token.Valid {
 ## Store Implements
 
 - [BuntDB](https://github.com/tidwall/buntdb)(default store)
-- [Redis](https://github.com/go-oauth2/redis)
-- [MongoDB](https://github.com/go-oauth2/mongo)
-- [MySQL](https://github.com/go-oauth2/mysql)
+- [Redis](https://github.com/cmict-aict/redis)
+- [MongoDB](https://github.com/cmict-aict/mongo)
+- [MySQL](https://github.com/cmict-aict/mysql)
 - [MySQL (Provides both client and token store)](https://github.com/imrenagi/go-oauth2-mysql)
 - [PostgreSQL](https://github.com/vgarvardt/go-oauth2-pg)
 - [DynamoDB](https://github.com/contamobi/go-oauth2-dynamodb)
@@ -189,9 +189,9 @@ Copyright (c) 2016 Lyric
 [build-status-image]: https://travis-ci.org/go-oauth2/oauth2.svg?branch=master
 [codecov-url]: https://codecov.io/gh/go-oauth2/oauth2
 [codecov-image]: https://codecov.io/gh/go-oauth2/oauth2/branch/master/graph/badge.svg
-[reportcard-url]: https://goreportcard.com/report/github.com/go-oauth2/oauth2/v4
-[reportcard-image]: https://goreportcard.com/badge/github.com/go-oauth2/oauth2/v4
-[godoc-url]: https://godoc.org/github.com/go-oauth2/oauth2/v4
-[godoc-image]: https://godoc.org/github.com/go-oauth2/oauth2/v4?status.svg
+[reportcard-url]: https://goreportcard.com/report/github.com/cmict-aict/oauth2/v4
+[reportcard-image]: https://goreportcard.com/badge/github.com/cmict-aict/oauth2/v4
+[godoc-url]: https://godoc.org/github.com/cmict-aict/oauth2/v4
+[godoc-image]: https://godoc.org/github.com/cmict-aict/oauth2/v4?status.svg
 [license-url]: http://opensource.org/licenses/MIT
 [license-image]: https://img.shields.io/npm/l/express.svg
